@@ -1,292 +1,340 @@
-/**
-* Template Name: Gp - v4.9.0
-* Template URL: https://bootstrapmade.com/gp-free-multipurpose-html-bootstrap-template/
-* Author: BootstrapMade.com
-* License: https://bootstrapmade.com/license/
-*/
-(function() {
+(function () {
   "use strict";
 
-  /**
-   * Easy selector helper function
-   */
-  const select = (el, all = false) => {
-    el = el.trim()
-    if (all) {
-      return [...document.querySelectorAll(el)]
+  // ==== Preloader
+  window.onload = function () {
+    window.setTimeout(fadeout, 500);
+  };
+
+  function fadeout() {
+    document.querySelector(".preloader").style.opacity = "0";
+    document.querySelector(".preloader").style.display = "none";
+  }
+
+  // ======= Sticky
+  window.onscroll = function () {
+    const header_navbar = document.querySelector(".navbar-area");
+    const sticky = header_navbar.offsetTop;
+    const logo = document.querySelector(".navbar-brand img");
+
+    if (window.pageYOffset > sticky) {
+      header_navbar.classList.add("sticky");
+      logo.src = "assets/images/logo/np-2.svg";
     } else {
-      return document.querySelector(el)
+      header_navbar.classList.remove("sticky");
+      logo.src = "assets/images/logo/np.svg";
     }
-  }
 
-  /**
-   * Easy event listener function
-   */
-  const on = (type, el, listener, all = false) => {
-    let selectEl = select(el, all)
-    if (selectEl) {
-      if (all) {
-        selectEl.forEach(e => e.addEventListener(type, listener))
-      } else {
-        selectEl.addEventListener(type, listener)
-      }
+    // show or hide the back-top-top button
+    const backToTop = document.querySelector(".back-to-top");
+    if (
+      document.body.scrollTop > 50 ||
+      document.documentElement.scrollTop > 50
+    ) {
+      backToTop.style.display = "flex";
+    } else {
+      backToTop.style.display = "none";
     }
-  }
+  };
 
-  /**
-   * Easy on scroll event listener 
-   */
-  const onscroll = (el, listener) => {
-    el.addEventListener('scroll', listener)
-  }
+  // ==== for menu scroll
+  const pageLink = document.querySelectorAll(".page-scroll");
 
-  /**
-   * Navbar links active state on scroll
-   */
-  let navbarlinks = select('#navbar .scrollto', true)
-  const navbarlinksActive = () => {
-    let position = window.scrollY + 200
-    navbarlinks.forEach(navbarlink => {
-      if (!navbarlink.hash) return
-      let section = select(navbarlink.hash)
-      if (!section) return
-      if (position >= section.offsetTop && position <= (section.offsetTop + section.offsetHeight)) {
-        navbarlink.classList.add('active')
-      } else {
-        navbarlink.classList.remove('active')
-      }
-    })
-  }
-  window.addEventListener('load', navbarlinksActive)
-  onscroll(document, navbarlinksActive)
-
-  /**
-   * Scrolls to an element with header offset
-   */
-  const scrollto = (el) => {
-    let header = select('#header')
-    let offset = header.offsetHeight
-
-    let elementPos = select(el).offsetTop
-    window.scrollTo({
-      top: elementPos - offset,
-      behavior: 'smooth'
-    })
-  }
-
-  /**
-   * Toggle .header-scrolled class to #header when page is scrolled
-   */
-  let selectHeader = select('#header')
-  if (selectHeader) {
-    const headerScrolled = () => {
-      if (window.scrollY > 100) {
-        selectHeader.classList.add('header-scrolled')
-      } else {
-        selectHeader.classList.remove('header-scrolled')
-      }
-    }
-    window.addEventListener('load', headerScrolled)
-    onscroll(document, headerScrolled)
-  }
-
-  /**
-   * Back to top button
-   */
-  let backtotop = select('.back-to-top')
-  if (backtotop) {
-    const toggleBacktotop = () => {
-      if (window.scrollY > 100) {
-        backtotop.classList.add('active')
-      } else {
-        backtotop.classList.remove('active')
-      }
-    }
-    window.addEventListener('load', toggleBacktotop)
-    onscroll(document, toggleBacktotop)
-  }
-
-  /**
-   * Mobile nav toggle
-   */
-  on('click', '.mobile-nav-toggle', function(e) {
-    select('#navbar').classList.toggle('navbar-mobile')
-    this.classList.toggle('bi-list')
-    this.classList.toggle('bi-x')
-  })
-
-  /**
-   * Mobile nav dropdowns activate
-   */
-  on('click', '.navbar .dropdown > a', function(e) {
-    if (select('#navbar').classList.contains('navbar-mobile')) {
-      e.preventDefault()
-      this.nextElementSibling.classList.toggle('dropdown-active')
-    }
-  }, true)
-
-  /**
-   * Scrool with ofset on links with a class name .scrollto
-   */
-  on('click', '.scrollto', function(e) {
-    if (select(this.hash)) {
-      e.preventDefault()
-
-      let navbar = select('#navbar')
-      if (navbar.classList.contains('navbar-mobile')) {
-        navbar.classList.remove('navbar-mobile')
-        let navbarToggle = select('.mobile-nav-toggle')
-        navbarToggle.classList.toggle('bi-list')
-        navbarToggle.classList.toggle('bi-x')
-      }
-      scrollto(this.hash)
-    }
-  }, true)
-
-  /**
-   * Scroll with ofset on page load with hash links in the url
-   */
-  window.addEventListener('load', () => {
-    if (window.location.hash) {
-      if (select(window.location.hash)) {
-        scrollto(window.location.hash)
-      }
-    }
-  });
-
-  /**
-   * Preloader
-   */
-  let preloader = select('#preloader');
-  if (preloader) {
-    window.addEventListener('load', () => {
-      preloader.remove()
-    });
-  }
-
-  /**
-   * Clients Slider
-   */
-  new Swiper('.clients-slider', {
-    speed: 400,
-    loop: true,
-    autoplay: {
-      delay: 5000,
-      disableOnInteraction: false
-    },
-    slidesPerView: 'auto',
-    pagination: {
-      el: '.swiper-pagination',
-      type: 'bullets',
-      clickable: true
-    },
-    breakpoints: {
-      320: {
-        slidesPerView: 2,
-        spaceBetween: 40
-      },
-      480: {
-        slidesPerView: 3,
-        spaceBetween: 60
-      },
-      640: {
-        slidesPerView: 4,
-        spaceBetween: 80
-      },
-      992: {
-        slidesPerView: 6,
-        spaceBetween: 120
-      }
-    }
-  });
-
-  /**
-   * Porfolio isotope and filter
-   */
-  window.addEventListener('load', () => {
-    let portfolioContainer = select('.portfolio-container');
-    if (portfolioContainer) {
-      let portfolioIsotope = new Isotope(portfolioContainer, {
-        itemSelector: '.portfolio-item'
+  pageLink.forEach((elem) => {
+    elem.addEventListener("click", (e) => {
+      e.preventDefault();
+      document.querySelector(elem.getAttribute("href")).scrollIntoView({
+        behavior: "smooth",
+        offsetTop: 1 - 60,
       });
-
-      let portfolioFilters = select('#portfolio-flters li', true);
-
-      on('click', '#portfolio-flters li', function(e) {
-        e.preventDefault();
-        portfolioFilters.forEach(function(el) {
-          el.classList.remove('filter-active');
-        });
-        this.classList.add('filter-active');
-
-        portfolioIsotope.arrange({
-          filter: this.getAttribute('data-filter')
-        });
-        portfolioIsotope.on('arrangeComplete', function() {
-          AOS.refresh()
-        });
-      }, true);
-    }
-
-  });
-
-  /**
-   * Initiate portfolio lightbox 
-   */
-  const portfolioLightbox = GLightbox({
-    selector: '.portfolio-lightbox'
-  });
-
-  /**
-   * Portfolio details slider
-   */
-  new Swiper('.portfolio-details-slider', {
-    speed: 400,
-    loop: true,
-    autoplay: {
-      delay: 5000,
-      disableOnInteraction: false
-    },
-    pagination: {
-      el: '.swiper-pagination',
-      type: 'bullets',
-      clickable: true
-    }
-  });
-
-  /**
-   * Testimonials slider
-   */
-  new Swiper('.testimonials-slider', {
-    speed: 600,
-    loop: true,
-    autoplay: {
-      delay: 5000,
-      disableOnInteraction: false
-    },
-    slidesPerView: 'auto',
-    pagination: {
-      el: '.swiper-pagination',
-      type: 'bullets',
-      clickable: true
-    }
-  });
-
-  /**
-   * Animation on scroll
-   */
-  window.addEventListener('load', () => {
-    AOS.init({
-      duration: 1000,
-      easing: "ease-in-out",
-      once: true,
-      mirror: false
     });
   });
 
-  /**
-   * Initiate Pure Counter 
-   */
-  new PureCounter();
+  // section menu active
+  function onScroll(event) {
+    const sections = document.querySelectorAll(".page-scroll");
+    const scrollPos =
+      window.pageYOffset ||
+      document.documentElement.scrollTop ||
+      document.body.scrollTop;
 
-})()
+    for (let i = 0; i < sections.length; i++) {
+      const currLink = sections[i];
+      const val = currLink.getAttribute("href");
+      const refElement = document.querySelector(val);
+      const scrollTopMinus = scrollPos + 73;
+      if (
+        refElement.offsetTop <= scrollTopMinus &&
+        refElement.offsetTop + refElement.offsetHeight > scrollTopMinus
+      ) {
+        document.querySelector(".page-scroll").classList.remove("active");
+        currLink.classList.add("active");
+      } else {
+        currLink.classList.remove("active");
+      }
+    }
+  }
+
+  window.document.addEventListener("scroll", onScroll);
+
+  //===== close navbar-collapse when a  clicked
+  let navbarToggler = document.querySelector(".navbar-toggler");
+  const navbarCollapse = document.querySelector(".navbar-collapse");
+
+  document.querySelectorAll(".page-scroll").forEach((e) =>
+    e.addEventListener("click", () => {
+      navbarToggler.classList.remove("active");
+      navbarCollapse.classList.remove("show");
+    })
+  );
+  navbarToggler.addEventListener("click", function () {
+    navbarToggler.classList.toggle("active");
+  });
+
+  // ========= glightbox
+  const myGallery = GLightbox({
+    href: "https://www.youtube.com/watch?v=r44RKWyfcFw",
+    type: "video",
+    source: "youtube", //vimeo, youtube or local
+    width: 900,
+    autoplayVideos: true,
+  });
+
+  //====== counter up
+  const cu = new counterUp({
+    start: 0,
+    duration: 2000,
+    intvalues: true,
+    interval: 100,
+    append: "k",
+  });
+  cu.start();
+
+  //=====  WOW active
+  new WOW().init();
+
+  //=====  particles
+  if (document.getElementById("particles-1"))
+    particlesJS("particles-1", {
+      particles: {
+        number: {
+          value: 40,
+          density: {
+            enable: !0,
+            value_area: 4000,
+          },
+        },
+        color: {
+          value: ["#FFFFFF", "#FFFFFF", "#FFFFFF"],
+        },
+        shape: {
+          type: "circle",
+          stroke: {
+            width: 0,
+            color: "#fff",
+          },
+          polygon: {
+            nb_sides: 5,
+          },
+          image: {
+            src: "img/github.svg",
+            width: 33,
+            height: 33,
+          },
+        },
+        opacity: {
+          value: 0.15,
+          random: !0,
+          anim: {
+            enable: !0,
+            speed: 0.2,
+            opacity_min: 0.15,
+            sync: !1,
+          },
+        },
+        size: {
+          value: 50,
+          random: !0,
+          anim: {
+            enable: !0,
+            speed: 2,
+            size_min: 5,
+            sync: !1,
+          },
+        },
+        line_linked: {
+          enable: !1,
+          distance: 150,
+          color: "#ffffff",
+          opacity: 0.4,
+          width: 1,
+        },
+        move: {
+          enable: !0,
+          speed: 1,
+          direction: "top",
+          random: !0,
+          straight: !1,
+          out_mode: "out",
+          bounce: !1,
+          attract: {
+            enable: !1,
+            rotateX: 600,
+            rotateY: 600,
+          },
+        },
+      },
+      interactivity: {
+        detect_on: "canvas",
+        events: {
+          onhover: {
+            enable: !1,
+            mode: "bubble",
+          },
+          onclick: {
+            enable: !1,
+            mode: "repulse",
+          },
+          resize: !0,
+        },
+        modes: {
+          grab: {
+            distance: 400,
+            line_linked: {
+              opacity: 1,
+            },
+          },
+          bubble: {
+            distance: 250,
+            size: 0,
+            duration: 2,
+            opacity: 0,
+            speed: 3,
+          },
+          repulse: {
+            distance: 400,
+            duration: 0.4,
+          },
+          push: {
+            particles_nb: 4,
+          },
+          remove: {
+            particles_nb: 2,
+          },
+        },
+      },
+      retina_detect: !0,
+    });
+
+  if (document.getElementById("particles-2"))
+    particlesJS("particles-2", {
+      particles: {
+        number: {
+          value: 40,
+          density: {
+            enable: !0,
+            value_area: 4000,
+          },
+        },
+        color: {
+          value: ["#FFFFFF", "#FFFFFF", "#FFFFFF"],
+        },
+        shape: {
+          type: "circle",
+          stroke: {
+            width: 0,
+            color: "#fff",
+          },
+          polygon: {
+            nb_sides: 5,
+          },
+          image: {
+            src: "img/github.svg",
+            width: 33,
+            height: 33,
+          },
+        },
+        opacity: {
+          value: 0.15,
+          random: !0,
+          anim: {
+            enable: !0,
+            speed: 0.2,
+            opacity_min: 0.15,
+            sync: !1,
+          },
+        },
+        size: {
+          value: 50,
+          random: !0,
+          anim: {
+            enable: !0,
+            speed: 2,
+            size_min: 5,
+            sync: !1,
+          },
+        },
+        line_linked: {
+          enable: !1,
+          distance: 150,
+          color: "#ffffff",
+          opacity: 0.4,
+          width: 1,
+        },
+        move: {
+          enable: !0,
+          speed: 1,
+          direction: "top",
+          random: !0,
+          straight: !1,
+          out_mode: "out",
+          bounce: !1,
+          attract: {
+            enable: !1,
+            rotateX: 600,
+            rotateY: 600,
+          },
+        },
+      },
+      interactivity: {
+        detect_on: "canvas",
+        events: {
+          onhover: {
+            enable: !1,
+            mode: "bubble",
+          },
+          onclick: {
+            enable: !1,
+            mode: "repulse",
+          },
+          resize: !0,
+        },
+        modes: {
+          grab: {
+            distance: 400,
+            line_linked: {
+              opacity: 1,
+            },
+          },
+          bubble: {
+            distance: 250,
+            size: 0,
+            duration: 2,
+            opacity: 0,
+            speed: 3,
+          },
+          repulse: {
+            distance: 400,
+            duration: 0.4,
+          },
+          push: {
+            particles_nb: 4,
+          },
+          remove: {
+            particles_nb: 2,
+          },
+        },
+      },
+      retina_detect: !0,
+    });
+})();
