@@ -1022,7 +1022,7 @@ p {
 }
 
 .counter-wrapper .single-counter {
-  max-width: 200px;
+  max-width: 230px;
   height: 150px;
   border-radius: 60px;
   position: relative;
@@ -1039,7 +1039,7 @@ p {
 
 @media only screen and (min-width: 576px) and (max-width: 767px) {
   .counter-wrapper .single-counter {
-    max-width: 200px;
+    max-width: 230px;
   height: 150px;
   }
 }
@@ -1047,7 +1047,7 @@ p {
 .counter-wrapper .single-counter::before {
   position: absolute;
   content: "";
-  width: 200px;
+  width: 230px;
   height: 150px;
   border-radius: 60px;
   top: 0;
@@ -1059,8 +1059,8 @@ p {
 
 @media (max-width: 767px) {
   .counter-wrapper .single-counter::before {
-    max-width: 100px;
-    height: 80px;
+    max-width: 200px;
+    height: 150px;
   }
 }
 
